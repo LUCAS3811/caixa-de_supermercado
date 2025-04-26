@@ -1,0 +1,95 @@
+def exibir_menu(produtos):
+    """Exibe o menu de produtos disponíveis."""
+    print("\n--- Menu de Produtos ---")
+    for codigo, (nome, preco) in produtos.items():
+        print(f"{codigo} - {nome}: R$ {preco:.2f}")
+    print("0 - Finalizar Compra")
+    print("-----------------------")
+
+def obter_item(produtos):
+    """Solicita o código do produto e retorna o item selecionado."""
+    while True:
+        codigo = input("Digite o código do produto (ou 0 para finalizar): ")
+        if codigo == '0':
+            return None
+        elif codigo in produtos:
+            return codigo, produtos[codigo]
+        else:
+            print("Código de produto inválido. Tente novamente.")
+
+def obter_quantidade():
+    """Solicita a quantidade do produto."""
+    while True:
+        try:
+            quantidade = int(input("Digite a quantidade: "))
+            if quantidade > 0:
+                return quantidade
+            else:
+                print("A quantidade deve ser maior que zero.")
+        except ValueError:
+            print("Entrada inválida. Digite um número inteiro.")
+
+def calcular_total(carrinho, produtos):
+    """Calcula o valor total da compra."""
+    total = 0
+    for codigo, quantidade in carrinho.items():
+        total += produtos[codigo][1] * quantidade
+    return total
+
+def exibir_carrinho(carrinho, produtos):
+    """Exibe os itens no carrinho de compras."""
+    if not carrinho:
+        print("O carrinho está vazio.")
+        return
+
+    print("\n--- Carrinho de Compras ---")
+    for codigo, quantidade in carrinho.items():
+        nome_produto = produtos[codigo][0]
+        preco_unitario = produtos[codigo][1]
+        preco_total_item = preco_unitario * quantidade
+        print(f"{nome_produto} x {quantidade} = R$ {preco_total_item:.2f}")
+    print("--------------------------")
+
+def main():
+    """Função principal do caixa do supermercado."""
+    produtos = {
+        "1": ("Arroz", 5.50),
+        "2": ("Feijão", 3.80),
+        "3": ("Macarrão", 2.20),
+        "4": ("Óleo", 6.75),
+        "5": ("Café", 4.90),
+        "6": ("sabao em po omo", 8.90),
+        "7":(" chã de fora" , 35.91),
+        "8": ("vassoura" , 18.85),
+        "9": ("farinha", 4.89),
+        "10": ("extrato de tomate", 4.85)
+        
+
+    }
+    carrinho = {}
+
+    print("Bem-vindo ao Supermercado D&D!")
+
+    while True:
+        
+        item = obter_item(produtos)
+
+        if item is None:
+            break
+
+        codigo, dados_produto = item
+        quantidade = obter_quantidade()
+
+        if codigo in carrinho:
+            carrinho[codigo] += quantidade
+        else:
+            carrinho[codigo] = quantidade
+
+        exibir_carrinho(carrinho, produtos)
+
+    total_compra = calcular_total(carrinho, produtos)
+    print(f"\nTotal da compra: R$ {total_compra:.2f}")
+    print("Obrigado e volte sempre!")
+
+if __name__ == "__main__":
+    main()
